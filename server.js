@@ -17,6 +17,37 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
+// Valid option values for each DB — used to validate Claude's output before sending to Notion
+const VALID_OPTIONS = {
+  '시티다이버 콘텐츠 아이디어': {
+    '결':   ['음식·인문', '커피', '개인서사', '영국·여행', '포맷실험', '장기프로젝트'],
+    '포맷': ['롱폼', '쇼츠', '토킹헤드', '미정'],
+  },
+  '시 아이디어':    { '형식': ['자유시', '시조', '산문시', '기타'] },
+  '소설 아이디어':  { '장르': ['SF', '문학', '스릴러', '퀴어', '기타'] },
+  '팟캐스트 아이디어': { '형식': ['솔로', '인터뷰', '대담', '기타'] },
+  '비즈니스 아이디어': { '영역': ['SaaS', '커뮤니티', '콘텐츠', '오프라인', '기타'] },
+  '여행 아이디어':  { '지역': ['유럽', '영국', '아시아', '미주·남미', '국내', '기타'] },
+  '단상/기타': {},
+};
+
+function validateTags(dbName, tags) {
+  const valid = VALID_OPTIONS[dbName] || {};
+  const result = {};
+  for (const [key, allowed] of Object.entries(valid)) {
+    const raw = tags?.[key];
+    if (!raw) continue;
+    if (Array.isArray(raw)) {
+      const filtered = raw.filter(v => allowed.includes(v));
+      if (filtered.length) result[key] = filtered;
+    } else if (allowed.includes(raw)) {
+      result[key] = raw;
+    }
+    // If value doesn't match any allowed option, silently drop it
+  }
+  return result;
+}
+
 const DB_IDS = {
   '시티다이버 콘텐츠 아이디어': '3a43ef90-447d-4a1c-b237-40c473e9844b',
   '시 아이디어': '763b39b8-900c-4e03-9cd2-61c468479a6f',
@@ -60,7 +91,7 @@ function buildNotionProperties(classified) {
     '상태': { select: { name: '🌱 씨앗' } },
   };
 
-  const tags = classified.tags || {};
+  const tags = validateTags(classified.db, classified.tags || {});
 
   switch (classified.db) {
     case '시티다이버 콘텐츠 아이디어':
