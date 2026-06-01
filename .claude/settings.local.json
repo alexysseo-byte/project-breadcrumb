@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"/Users/alexseo/Library/Mobile Documents/com~apple~CloudDocs/Micro SaaS Projects/\")",
+      "Bash(npm install *)",
+      "Bash(node scripts/gen-icons.mjs)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(cat /tmp/breadcrumb-dev.log | grep -E \"\\(error|Error|ready|running\\)\" | head -10)",
+      "Bash(mkdir -p \"/Users/alexseo/Library/Mobile Documents/com~apple~CloudDocs/Micro SaaS Projects/Breadcrumb/.claude\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Initial commit: Breadcrumb PWA *)"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84 98" shape-rendering="crispEdges">
+  <!-- Pixel art capybara icon -->
+  <!-- Ears -->
+  <rect x="14" y="7"  width="7" height="7" fill="#A07848"/>
+  <rect x="63" y="7"  width="7" height="7" fill="#A07848"/>
+  <!-- Head -->
+  <rect x="21" y="7"  width="42" height="7" fill="#A07848"/>
+  <rect x="14" y="14" width="56" height="7" fill="#A07848"/>
+  <!-- Eyes -->
+  <rect x="28" y="21" width="7"  height="7" fill="#1A0800"/>
+  <rect x="49" y="21" width="7"  height="7" fill="#1A0800"/>
+  <!-- Nose -->
+  <rect x="35" y="28" width="7"  height="7" fill="#1A0800"/>
+  <!-- Head bottom -->
+  <rect x="14" y="28" width="56" height="7" fill="#A07848"/>
+  <!-- Body -->
+  <rect x="7"  y="35" width="70" height="7" fill="#A07848"/>
+  <!-- Belly -->
+  <rect x="7"  y="42" width="7"  height="7" fill="#A07848"/>
+  <rect x="14" y="42" width="56" height="7" fill="#D4B896"/>
+  <rect x="70" y="42" width="7"  height="7" fill="#A07848"/>
+  <rect x="7"  y="49" width="7"  height="7" fill="#A07848"/>
+  <rect x="14" y="49" width="56" height="7" fill="#D4B896"/>
+  <rect x="70" y="49" width="7"  height="7" fill="#A07848"/>
+  <!-- Body bottom -->
+  <rect x="7"  y="56" width="70" height="7" fill="#A07848"/>
+  <!-- Legs -->
+  <rect x="14" y="63" width="7"  height="7" fill="#7B5830"/>
+  <rect x="63" y="63" width="7"  height="7" fill="#7B5830"/>
+  <rect x="14" y="70" width="7"  height="7" fill="#7B5830"/>
+  <rect x="63" y="70" width="7"  height="7" fill="#7B5830"/>
+</svg>
