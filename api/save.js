@@ -1,11 +1,12 @@
 const DB_IDS = {
-  '시티다이버 콘텐츠 아이디어': '3a43ef90-447d-4a1c-b237-40c473e9844b',
+  '시티다이버 콘텐츠 아이디어': 'd42add14-7108-4199-bd07-2deddd7731b7',
   '시 아이디어': '763b39b8-900c-4e03-9cd2-61c468479a6f',
   '소설 아이디어': 'b3d96646-df1e-49af-b8b8-ffabf41bc5c9',
   '팟캐스트 아이디어': 'aaface18-cd59-46f9-8f1c-b796427cd367',
   '단상/기타': '3e9b1e79-0c56-40b0-8387-2c172c9dcee4',
   '비즈니스 아이디어': '527e2645-6732-477b-b705-47323f2e2094',
   '여행 아이디어': '8fa59c99-c9f5-4532-af3a-ef49a25b9097',
+  '바이브 코딩 아이디어': '37363abd-a825-8031-933a-c0b692c246a3',
 };
 
 const VALID_OPTIONS = {
@@ -19,6 +20,7 @@ const VALID_OPTIONS = {
   '비즈니스 아이디어': { '영역': ['SaaS', '커뮤니티', '콘텐츠', '오프라인', '기타'] },
   '여행 아이디어':     { '지역': ['유럽', '영국', '아시아', '미주·남미', '국내', '기타'] },
   '단상/기타': {},
+  '바이브 코딩 아이디어': { '유형': ['웹앱', 'CLI', '자동화', 'API', '기타'] },
 };
 
 function validateTags(dbName, tags) {
@@ -63,6 +65,9 @@ function buildNotionProperties(classified) {
       break;
     case '여행 아이디어':
       if (tags['지역']) props['지역'] = { select: { name: tags['지역'] } };
+      break;
+    case '바이브 코딩 아이디어':
+      if (tags['유형']) props['유형'] = { select: { name: tags['유형'] } };
       break;
   }
   return props;
