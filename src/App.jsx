@@ -12,6 +12,35 @@ const DB_EMOJI = {
   '여행 아이디어': '✈️',
 };
 
+const DB_IDS = {
+  '시티다이버 콘텐츠 아이디어': '3a43ef90447d4a1cb23740c473e9844b',
+  '시 아이디어':               '763b39b8900c4e039cd261c468479a6f',
+  '소설 아이디어':             'b3d96646df1e49afb8b8ffabf41bc5c9',
+  '팟캐스트 아이디어':         'aaface18cd5946f98f1cb796427cd367',
+  '단상/기타':                 '3e9b1e790c5640b083872c172c9dcee4',
+  '비즈니스 아이디어':         '527e26456732477bb70547323f2e2094',
+  '여행 아이디어':             '8fa59c99c9f54532af3aef49a25b9097',
+};
+
+const HISTORY_KEY = 'breadcrumb_history';
+const MAX_HISTORY = 10;
+
+function notionDeepLink(id) {
+  return `notion://www.notion.so/${id.replace(/-/g, '')}`;
+}
+
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function saveHistory(entry) {
+  const history = loadHistory();
+  const next = [entry, ...history].slice(0, MAX_HISTORY);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+  return next;
+}
+
 const DB_TO_CAPY = {
   '시티다이버 콘텐츠 아이디어': 'saved_citydiver',
   '시 아이디어':                'saved_poem',
@@ -28,6 +57,7 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [history, setHistory] = useState(loadHistory);
   const recognitionRef   = useRef(null);
   const committedTextRef = useRef('');
 
@@ -114,6 +144,15 @@ export default function App() {
       setStatus('saved');
       setText('');
       committedTextRef.current = '';
+
+      const newEntry = {
+        title: classified.title,
+        db: classified.db,
+        pageId: saved.id,
+        savedAt: Date.now(),
+      };
+      setHistory(saveHistory(newEntry));
+
       setTimeout(() => setStatus('idle'), 4000);
     } catch (err) {
       setErrorMsg(err.message || '알 수 없는 오류가 발생했어요');
@@ -243,20 +282,57 @@ export default function App() {
         </p>
         <div className="grid grid-cols-2 gap-2">
           {Object.entries(DB_EMOJI).map(([name, emoji]) => (
-            <div
+            <a
               key={name}
+              href={notionDeepLink(DB_IDS[name])}
               className="rounded-2xl px-3 py-2.5 text-xs font-bold
                          bg-white dark:bg-capy-900/40
                          border border-capy-100 dark:border-capy-800
                          text-capy-600 dark:text-capy-400
-                         flex items-center gap-1.5"
+                         flex items-center gap-1.5
+                         hover:border-capy-300 dark:hover:border-capy-600
+                         hover:bg-capy-50 dark:hover:bg-capy-800/40
+                         transition-colors active:scale-95"
             >
               <span>{emoji}</span>
               <span className="truncate">{name}</span>
-            </div>
+            </a>
           ))}
         </div>
       </section>
+
+      {/* ── History ── */}
+      {history.length > 0 && (
+        <section className="mt-8 w-full max-w-sm">
+          <p className="text-xs font-bold text-capy-400 dark:text-capy-600 uppercase tracking-wider mb-3 text-center">
+            최근 저장한 아이디어
+          </p>
+          <div className="flex flex-col gap-2">
+            {history.map((entry) => (
+              <a
+                key={`${entry.pageId}-${entry.savedAt}`}
+                href={notionDeepLink(entry.pageId)}
+                className="rounded-2xl px-4 py-3
+                           bg-white dark:bg-capy-900/40
+                           border border-capy-100 dark:border-capy-800
+                           hover:border-capy-300 dark:hover:border-capy-600
+                           hover:bg-capy-50 dark:hover:bg-capy-800/40
+                           transition-colors active:scale-95
+                           flex items-center gap-2.5"
+              >
+                <span className="text-base shrink-0">{DB_EMOJI[entry.db] || '📝'}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-capy-800 dark:text-capy-200 truncate">{entry.title}</p>
+                  <p className="text-[10px] text-capy-400 dark:text-capy-600 mt-0.5">{entry.db}</p>
+                </div>
+                <span className="text-[10px] text-capy-300 dark:text-capy-700 shrink-0">
+                  {new Date(entry.savedAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
 
       <footer className="mt-8 text-xs text-capy-300 dark:text-capy-700 font-semibold">
         🍞 Breadcrumb — 작은 아이디어를 놓치지 않게
