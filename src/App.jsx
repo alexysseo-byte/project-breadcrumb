@@ -305,11 +305,15 @@ export default function App() {
       </section>
 
       {/* ── History ── */}
-      {history.length > 0 && (
-        <section className="mt-8 w-full max-w-sm">
-          <p className="text-xs font-bold text-capy-400 dark:text-capy-600 uppercase tracking-wider mb-3 text-center">
-            최근 저장한 아이디어
+      <section className="mt-8 w-full max-w-sm">
+        <p className="text-xs font-bold text-capy-400 dark:text-capy-600 uppercase tracking-wider mb-3 text-center">
+          최근 저장한 아이디어
+        </p>
+        {history.length === 0 ? (
+          <p className="text-center text-xs text-capy-300 dark:text-capy-700 py-4">
+            아직 저장한 아이디어가 없어요 🌱
           </p>
+        ) : (
           <div className="flex flex-col gap-2">
             {history.map((entry) => (
               <a
@@ -334,8 +338,8 @@ export default function App() {
               </a>
             ))}
           </div>
-        </section>
-      )}
+        )}
+      </section>
 
       <footer className="mt-8 text-xs text-capy-300 dark:text-capy-700 font-semibold">
         🍞 Breadcrumb — 작은 아이디어를 놓치지 않게
