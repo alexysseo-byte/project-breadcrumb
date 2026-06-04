@@ -11,15 +11,16 @@ const DB_IDS = {
 
 const VALID_OPTIONS = {
   '시티다이버 콘텐츠 아이디어': {
-    '결':   ['음식·인문', '커피', '개인서사', '영국·여행', '포맷실험', '장기프로젝트'],
-    '포맷': ['롱폼', '쇼츠', '토킹헤드', '미정'],
+    '결':    ['음식·인문', '커피', '개인서사', '영국·여행', '포맷실험', '장기프로젝트'],
+    '포맷':  ['롱폼', '쇼츠', '토킹헤드', '미정'],
+    '플랫폼': ['유튜브', '인스타', '미정'],
   },
-  '시 아이디어':       { '형식': ['자유시', '시조', '산문시', '기타'] },
-  '소설 아이디어':     { '장르': ['SF', '문학', '스릴러', '퀴어', '기타'] },
-  '팟캐스트 아이디어': { '형식': ['솔로', '인터뷰', '대담', '기타'] },
-  '비즈니스 아이디어': { '영역': ['SaaS', '커뮤니티', '콘텐츠', '오프라인', '기타'] },
-  '여행 아이디어':     { '지역': ['유럽', '영국', '아시아', '미주·남미', '국내', '기타'] },
-  '단상/기타': {},
+  '시 아이디어':         { '형식': ['자유시', '시조', '산문시', '기타'] },
+  '소설 아이디어':       { '장르': ['SF', '문학', '스릴러', '퀴어', '기타'] },
+  '팟캐스트 아이디어':   { '형식': ['솔로', '인터뷰', '대담', '기타'] },
+  '비즈니스 아이디어':   { '영역': ['SaaS', '커뮤니티', '콘텐츠', '오프라인', '기타'] },
+  '여행 아이디어':       { '지역': ['유럽', '영국', '아시아', '미주·남미', '국내', '기타'] },
+  '단상/기타':           {},
   '바이브 코딩 아이디어': { '유형': ['웹앱', 'CLI', '자동화', 'API', '기타'] },
 };
 
@@ -45,11 +46,11 @@ function buildNotionProperties(classified) {
     '제목': { title: [{ text: { content: classified.title } }] },
     '상태': { select: { name: '🌱 씨앗' } },
   };
-
   switch (classified.db) {
     case '시티다이버 콘텐츠 아이디어':
-      if (tags['결']?.length)   props['결']   = { multi_select: tags['결'].map(v => ({ name: v })) };
-      if (tags['포맷']?.length) props['포맷'] = { multi_select: tags['포맷'].map(v => ({ name: v })) };
+      if (tags['결']?.length)    props['결']    = { multi_select: tags['결'].map(v => ({ name: v })) };
+      if (tags['포맷']?.length)  props['포맷']  = { multi_select: tags['포맷'].map(v => ({ name: v })) };
+      if (tags['플랫폼']?.length) props['플랫폼'] = { multi_select: tags['플랫폼'].map(v => ({ name: v })) };
       break;
     case '시 아이디어':
       if (tags['형식']) props['형식'] = { select: { name: tags['형식'] } };
@@ -81,40 +82,36 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
-    const { classified, originalText } = req.body;
+    const { classified } = req.body;
+    if (!classified?.db || !classified?.title) {
+      return res.status(400).json({ error: '분류 데이터가 없어요' });
+    }
+
+    const dbId = DB_IDS[classified.db];
+    if (!dbId) return res.status(400).json({ error: `알 수 없는 db: ${classified.db}` });
 
     const notionKey = process.env.VITE_NOTION_API_KEY;
     if (!notionKey) return res.status(500).json({ error: 'Notion API 키가 설정되지 않았어요' });
-
-    const dbId = DB_IDS[classified.db];
-    if (!dbId) return res.status(400).json({ error: `DB를 찾을 수 없어요: ${classified.db}` });
 
     const properties = buildNotionProperties(classified);
 
     const response = await fetch('https://api.notion.com/v1/pages', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${notionKey}`,
+        'Authorization': `Bearer ${notionKey}`,
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         parent: { database_id: dbId },
         properties,
-        children: [{
-          object: 'block',
-          type: 'paragraph',
-          paragraph: {
-            rich_text: [{ type: 'text', text: { content: originalText } }],
-          },
-        }],
       }),
     });
 
     const data = await response.json();
-    if (!response.ok) throw new Error(data.message || JSON.stringify(data));
+    if (!response.ok) throw new Error(data.message || 'Notion API 오류');
 
-    res.json({ ok: true, id: data.id });
+    res.json({ success: true, id: data.id });
   } catch (err) {
     console.error('[save]', err);
     res.status(500).json({ error: err.message });
