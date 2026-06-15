@@ -40,6 +40,18 @@ function validateTags(dbName, tags) {
   return result;
 }
 
+function chunkText(text) {
+  const chunks = [];
+  for (let i = 0; i < text.length; i += 2000) {
+    chunks.push({
+      object: 'block',
+      type: 'paragraph',
+      paragraph: { rich_text: [{ type: 'text', text: { content: text.slice(i, i + 2000) } }] },
+    });
+  }
+  return chunks;
+}
+
 function buildNotionProperties(classified) {
   const tags = validateTags(classified.db, classified.tags || {});
   const props = {
@@ -82,7 +94,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
-    const { classified } = req.body;
+    const { classified, originalText } = req.body;
     if (!classified?.db || !classified?.title) {
       return res.status(400).json({ error: '분류 데이터가 없어요' });
     }
@@ -105,6 +117,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         parent: { database_id: dbId },
         properties,
+        children: originalText ? chunkText(originalText) : [],
       }),
     });
 

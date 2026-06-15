@@ -153,6 +153,7 @@ export default function App() {
         db: classified.db,
         pageId: saved.id,
         savedAt: Date.now(),
+        text: trimmed,
       };
       setHistory(saveHistory(newEntry));
 
@@ -316,26 +317,27 @@ export default function App() {
         ) : (
           <div className="flex flex-col gap-2">
             {history.map((entry) => (
-              <a
+              <div
                 key={`${entry.pageId}-${entry.savedAt}`}
-                href={notionDeepLink(entry.pageId)}
                 className="rounded-2xl px-4 py-3
                            bg-white dark:bg-capy-900/40
                            border border-capy-100 dark:border-capy-800
-                           hover:border-capy-300 dark:hover:border-capy-600
-                           hover:bg-capy-50 dark:hover:bg-capy-800/40
-                           transition-colors active:scale-95
-                           flex items-center gap-2.5"
+                           flex items-start gap-2.5"
               >
-                <span className="text-base shrink-0">{DB_EMOJI[entry.db] || '📝'}</span>
+                <span className="text-base shrink-0 mt-0.5">{DB_EMOJI[entry.db] || '📝'}</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-bold text-capy-800 dark:text-capy-200 truncate">{entry.title}</p>
                   <p className="text-[10px] text-capy-400 dark:text-capy-600 mt-0.5">{entry.db}</p>
+                  {entry.text && (
+                    <p className="text-[11px] text-capy-600 dark:text-capy-400 mt-1 line-clamp-2 whitespace-pre-wrap break-words">
+                      {entry.text}
+                    </p>
+                  )}
                 </div>
-                <span className="text-[10px] text-capy-300 dark:text-capy-700 shrink-0">
+                <span className="text-[10px] text-capy-300 dark:text-capy-700 shrink-0 mt-0.5">
                   {new Date(entry.savedAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
                 </span>
-              </a>
+              </div>
             ))}
           </div>
         )}
