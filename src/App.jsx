@@ -6,22 +6,28 @@ const DB_EMOJI = {
   '시티다이버 콘텐츠 아이디어': '🎬',
   '시 아이디어': '✍️',
   '소설 아이디어': '📖',
+  '미래 소설 설정': '🚀',
+  '브런치 글 아이디어': '✍🏻',
   '팟캐스트 아이디어': '🎙️',
   '단상/기타': '💭',
   '비즈니스 아이디어': '💼',
   '여행 아이디어': '✈️',
   '바이브 코딩 아이디어': '👨🏻‍💻',
+  '기타 컨텐츠 아이디어': '💡',
 };
 
 const DB_IDS = {
   '시티다이버 콘텐츠 아이디어': 'd42add1471084199bd072deddd7731b7',
   '시 아이디어':               '763b39b8900c4e039cd261c468479a6f',
   '소설 아이디어':             'b3d96646df1e49afb8b8ffabf41bc5c9',
+  '미래 소설 설정':           '54fa9125375a450e8a6223461c63dbed',
+  '브런치 글 아이디어':         '37e63abda825806bb366e7db7096402a',
   '팟캐스트 아이디어':         'aaface18cd5946f98f1cb796427cd367',
   '단상/기타':                 '3e9b1e790c5640b083872c172c9dcee4',
   '비즈니스 아이디어':         '527e26456732477bb70547323f2e2094',
   '여행 아이디어':             '8fa59c99c9f54532af3aef49a25b9097',
   '바이브 코딩 아이디어':      '37363abda8258031933ac0b692c246a3',
+  '기타 컨텐츠 아이디어':      '37563abda825802baa46d3ba232b3526',
 };
 
 const HISTORY_KEY = 'breadcrumb_history';
@@ -47,11 +53,14 @@ const DB_TO_CAPY = {
   '시티다이버 콘텐츠 아이디어': 'saved_citydiver',
   '시 아이디어':                'saved_poem',
   '소설 아이디어':              'saved_novel',
+  '미래 소설 설정':            'saved_novel',
+  '브런치 글 아이디어':          'saved_poem',
   '팟캐스트 아이디어':          'saved_podcast',
   '단상/기타':                  'saved_misc',
   '비즈니스 아이디어':          'saved_business',
   '여행 아이디어':              'saved_travel',
   '바이브 코딩 아이디어':       'saved_business',
+  '기타 컨텐츠 아이디어':       'saved_misc',
 };
 
 export default function App() {
