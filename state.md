@@ -34,6 +34,24 @@
 - npm run build 정상 실행 완료: PWA 아이콘 생성(192px, 512px) 및 Vite 프로덕션 번들링 성공 (753ms).
 - git status 검증 완료: .env 파일의 외부 노출 차단 유지, 수정 대상 4개 파일(api/classify.js, api/save.js, server.js, src/App.jsx) 정상 반영 확인.
 
+## [2026-09-09] [최종 완료] Git 커밋·푸시, Vercel 자동 배포 및 11개 DB 전수 실데이터 검증
+- Git 커밋(commit hash: 18fcf03) 및 origin main 푸시 완료.
+- Vercel 프로덕션 자동 배포 완료 (https://project-breadcrumb.vercel.app).
+- 11개 데이터베이스 전수에 대해 실제 입력 예시를 기반으로 AI 분류(/api/classify) 및 Notion 저장(/api/save) 파이프라인 전수 테스트 실행.
+- 결과: 11개 데이터베이스 모두 200 OK 및 Notion Page ID 정상 발급 (성공률 100%).
+  • 시티다이버 콘텐츠 아이디어: 성공 (ID: 3d563abd-a825-8120-a8f0-cd1a96123a73)
+  • 시 아이디어: 성공 (ID: 3d563abd-a825-81c1-bca5-f0c771942707)
+  • 소설 아이디어: 성공 (ID: 3d563abd-a825-8127-9e12-dd3551bf3fda)
+  • 미래 소설 설정: 성공 (ID: 3d563abd-a825-814a-a056-c8fdbb040ad4)
+  • 브런치 글 아이디어: 성공 (ID: 3d563abd-a825-816a-bf4f-c7a8d487d1f9)
+  • 팟캐스트 아이디어: 성공 (ID: 3d563abd-a825-81b5-8442-d35b49e1d0d5)
+  • 단상/기타: 성공 (ID: 3d663abd-a825-811b-beab-c90306d52a31)
+  • 비즈니스 아이디어: 성공 (ID: 3d563abd-a825-81d2-8833-f328893948a5)
+  • 여행 아이디어: 성공 (ID: 3d563abd-a825-81aa-9d6d-e27e4ffe0c70)
+  • 바이브 코딩 아이디어: 성공 (ID: 3d663abd-a825-81a3-85d9-d4603eed8ebf)
+  • 기타 컨텐츠 아이디어: 성공 (ID: 3d663abd-a825-816f-bc6f-f601c4a28e17)
+
+
 
 
 
